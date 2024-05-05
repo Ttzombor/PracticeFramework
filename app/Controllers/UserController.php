@@ -3,7 +3,6 @@
 namespace App\Controllers;
 
 use App\Model\User;
-use App\Notification\Notification;
 
 class UserController extends \App\Http\AbstractController
 {

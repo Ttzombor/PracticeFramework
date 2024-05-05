@@ -1,11 +1,10 @@
 <?php
-$notifications = App\Notification\Notification::$notifications;
+$notifications = App\Notification\NotificationCollector::getNotifications();
 
 if ($notifications) : ?>
-<?php foreach ($notifications as $notification) : ?>
-        <div class="alert alert-<?= $notification['type'] ?>" role="alert">
-            <?= $notification['message'] ?>
-        </div>
+    <?php foreach ($notifications as $notification) : ?>
+            <div class="alert alert-<?= $notification['type'] ?>" role="alert">
+                <?= $notification['message'] ?>
+            </div>
     <?php endforeach; ?>
-    <?php App\Notification\Notification::$notifications = []; ?>
 <?php endif; ?>

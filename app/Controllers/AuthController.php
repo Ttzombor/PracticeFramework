@@ -2,8 +2,9 @@
 
 namespace App\Controllers;
 
+use App\Http\Request;
 use App\Model\User;
-use App\Notification\Notification;
+use App\Notification\NotificationCollector;
 
 class AuthController extends \App\Http\AbstractController
 {
@@ -16,7 +17,7 @@ class AuthController extends \App\Http\AbstractController
         if ($user) {
             $user = $user[0];
         } else {
-            Notification::setNotification('Please enter a valid username and password.', 'danger') ;
+            NotificationCollector::setNotification('Please enter a valid username and password.', 'danger') ;
             return 'login';
         }
 
@@ -25,10 +26,13 @@ class AuthController extends \App\Http\AbstractController
         }
         if (password_verify($password, $user['password'])) {
             $_SESSION['user'] = $user['id'];
-            Notification::setNotification('Well done!', 'success') ;
-            return $this->redirect('/post');
+            NotificationCollector::setNotification('Well done!', 'success') ;
+            if (Request::getUri() == '/user/login') {
+                return $this->redirect('/post');
+            }
+            return $this->redirect(Request::getUri());
         } else {
-            Notification::setNotification('Please enter a valid username and password.', 'danger') ;
+            NotificationCollector::setNotification('Please enter a valid username and password.', 'danger') ;
             $this->redirect('/login');
         }
 
@@ -37,7 +41,7 @@ class AuthController extends \App\Http\AbstractController
     public function logout()
     {
         unset($_SESSION['user']);
-        Notification::setNotification('Success!', 'success') ;
+        NotificationCollector::setNotification('Success!', 'success') ;
 
         $this->redirect('/login');
 
