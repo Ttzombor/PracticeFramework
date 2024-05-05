@@ -13,5 +13,5 @@ interface BlockBuilderInterface
 
     public function buildNotification();
 
-    public function buildAdminPage();
+    public function buildAdminNavigation();
 }
