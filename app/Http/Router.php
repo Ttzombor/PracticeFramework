@@ -42,13 +42,29 @@ class Router
         foreach (self::$list as $route) {
             if ($route['uri'] === $uri) {
                 if ($route['middleware']) {
-                    $baseMiddleware = new BaseMiddleware();
-                    foreach ($route['middleware'] as $middleware) {
-                        /** @var MiddlewareInterface $middleware */
-                        $middleware = new $middleware();
-                        $baseMiddleware->setNext($middleware);
+                    $middleware = new BaseMiddleware();
+                    $middlewareClass = null;
+                    foreach ($route['middleware'] as $newMiddleware => $params) {
+
+                        if (class_exists($params)) {
+                            $newMiddleware = $params;
+                            $params = null;
+                        }
+                        if (!class_exists($newMiddleware)) {
+                            throw new \Exception('Middleware not found');
+                        }
+                        if ($middlewareClass) {
+                            /** @var MiddlewareInterface $newMiddleware */
+                            $newMiddlewareClass = new $newMiddleware($params);
+                            $middlewareClass->setNext($newMiddlewareClass);
+                            $middlewareClass = $newMiddlewareClass;
+                        } else {
+                            /** @var MiddlewareInterface $newMiddleware */
+                            $middlewareClass = new $newMiddleware($params);
+                            $middleware->setNext($middlewareClass);
+                        }
                     }
-                    $route['middleware'] = $baseMiddleware;
+                    $route['middleware'] = $middleware;
                 }
                 return new static($uri, $route['page'], $route['type'], $route['middleware']);
             }

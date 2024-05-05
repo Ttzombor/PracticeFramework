@@ -23,8 +23,13 @@ class Http implements HttpInterface
     {
         if ($route instanceof Router) {
             if ($route->middleware) {
-                if ($route->middleware->check() == false) {
-                    return Page::getPage('login');
+                if ($page = $route->middleware->check()) {
+                    if (is_string($page)) {
+                        return Page::getPage($page);
+                    }
+                    if ($page == false) {
+                        return Page::getPage('login');
+                    }
                 }
             }
 

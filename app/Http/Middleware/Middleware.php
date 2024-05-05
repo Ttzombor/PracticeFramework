@@ -6,6 +6,11 @@ use App\Http\Interface\MiddlewareInterface;
 
 abstract class Middleware implements MiddlewareInterface
 {
+    public function __construct(
+        protected $params = null
+    ) {
+    }
+
     private $nextHandler;
 
     public function setNext(MiddlewareInterface $handler) {
