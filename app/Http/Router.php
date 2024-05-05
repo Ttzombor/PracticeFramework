@@ -66,10 +66,10 @@ class Router
                     }
                     $route['middleware'] = $middleware;
                 }
-                return new static($uri, $route['page'], $route['type'], $route['middleware']);
+                return new self($uri, $route['page'], $route['type'], $route['middleware']);
             }
         }
-         return new static($uri, '404', null, null);
+         return new self($uri, '404', null, null);
     }
 
 

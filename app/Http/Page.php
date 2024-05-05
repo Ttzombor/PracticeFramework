@@ -2,29 +2,20 @@
 
 namespace App\Http;
 
+use App\Http\Page\PageBuilder;
 use Exception;
 
 class Page
 {
     public static function getPage($pageName)
     {
-        $file =  $_SERVER['DOCUMENT_ROOT'] . "/view/{$pageName}.phtml";
-        if (file_exists($file)) {
-            require_once  $_SERVER['DOCUMENT_ROOT'] . "/view/header/head.phtml";
-            require_once  $_SERVER['DOCUMENT_ROOT'] . "/view/header/navigation.phtml";
-            require_once  $_SERVER['DOCUMENT_ROOT'] . "/view/header/notifications.phtml";
-
-            require_once $file;
-
-            require_once  $_SERVER['DOCUMENT_ROOT'] . "/view/footer/footer.phtml";
-
-        } else {
-            throw new Exception("Page not found");
-        }
+        $page = new PageBuilder();
+        return $page($pageName);
     }
 
     public static function get404Page()
     {
-        return self::getPage('404');
+        $page = new PageBuilder();
+        return $page('404');
     }
 }
