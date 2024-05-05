@@ -7,6 +7,6 @@ class DashboardController extends \App\Http\AbstractController
 {
     public function get()
     {
-        return 'user';
+        return 'userDashboard';
     }
 }
