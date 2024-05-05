@@ -9,10 +9,14 @@ class Request
         if (!isset($_SERVER['REQUEST_URI'])) {
             return '/';
         }
-        if (strpos($_SERVER['REQUEST_URI'], '?') !== false) {
-            return strstr($_SERVER['REQUEST_URI'], '?', true);
+        $uri = $_SERVER['REQUEST_URI'];
+        if (substr($uri, -1) === '/') {
+            return mb_substr($uri, 0, -1);
         }
-        return $_SERVER['REQUEST_URI'];
+        if (strpos($uri, '?') !== false) {
+            return strstr($uri, '?', true);
+        }
+        return $uri;
     }
 
     public static function getMethod()
