@@ -13,7 +13,8 @@ abstract class Middleware implements MiddlewareInterface
 
     private $nextHandler;
 
-    public function setNext(MiddlewareInterface $handler) {
+    public function setNext(MiddlewareInterface $handler)
+    {
         $this->nextHandler = $handler;
 
         return $handler;

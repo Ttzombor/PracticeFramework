@@ -4,7 +4,7 @@ namespace App\Notification;
 
 class NotificationCollector
 {
-    static $notifications = [];
+    public static $notifications = [];
 
     public static function setNotification($message, $type = 'warning')
     {

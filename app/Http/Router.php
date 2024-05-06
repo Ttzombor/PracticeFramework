@@ -12,8 +12,7 @@ class Router
         public $pageName,
         public $type,
         public $middleware
-    )
-    {
+    ) {
     }
 
     private static $list = [];
@@ -45,7 +44,6 @@ class Router
                     $middleware = new BaseMiddleware();
                     $middlewareClass = null;
                     foreach ($route['middleware'] as $newMiddleware => $params) {
-
                         if (class_exists($params)) {
                             $newMiddleware = $params;
                             $params = null;
@@ -71,7 +69,4 @@ class Router
         }
          return new self($uri, '404', null, null);
     }
-
-
-
 }

@@ -33,6 +33,4 @@ class PageBuilder
             $this->buildPage($page);
         }
     }
-
-
 }

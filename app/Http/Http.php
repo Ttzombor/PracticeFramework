@@ -43,5 +43,4 @@ class Http implements HttpInterface
         }
         return '404';
     }
-
 }

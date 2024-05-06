@@ -67,14 +67,14 @@ class BlockBuilder implements \App\Http\Page\Interface\BlockBuilderInterface
 
     public function buildFooter()
     {
-        if (file_exists( $_SERVER['DOCUMENT_ROOT'] . "/view/footer/footer.phtml")) {
+        if (file_exists($_SERVER['DOCUMENT_ROOT'] . "/view/footer/footer.phtml")) {
             $this->block->elements[] =  $_SERVER['DOCUMENT_ROOT'] . "/view/footer/footer.phtml";
         }
     }
 
     public function buildNotification()
     {
-        if (file_exists( $_SERVER['DOCUMENT_ROOT'] . "/view/footer/notification.phtml")) {
+        if (file_exists($_SERVER['DOCUMENT_ROOT'] . "/view/footer/notification.phtml")) {
             $this->block->elements[] =  $_SERVER['DOCUMENT_ROOT'] . "/view/footer/notification.phtml";
         }
     }

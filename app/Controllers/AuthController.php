@@ -35,7 +35,6 @@ class AuthController extends \App\Http\AbstractController
             NotificationCollector::setNotification('Please enter a valid username and password.', 'danger') ;
             $this->redirect('/login');
         }
-
     }
 
     public function logout()
@@ -44,6 +43,5 @@ class AuthController extends \App\Http\AbstractController
         NotificationCollector::setNotification('Success!', 'success') ;
 
         $this->redirect('/login');
-
     }
 }
