@@ -74,8 +74,8 @@ class BlockBuilder implements \App\Http\Page\Interface\BlockBuilderInterface
 
     public function buildNotification()
     {
-        if (file_exists($_SERVER['DOCUMENT_ROOT'] . "/view/footer/notification.phtml")) {
-            $this->block->elements[] =  $_SERVER['DOCUMENT_ROOT'] . "/view/footer/notification.phtml";
+        if (file_exists($_SERVER['DOCUMENT_ROOT'] . "/view/header/notifications.phtml")) {
+            $this->block->elements[] =  $_SERVER['DOCUMENT_ROOT'] . "/view/header/notifications.phtml";
         }
     }
 
