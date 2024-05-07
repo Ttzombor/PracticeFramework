@@ -35,7 +35,7 @@ class PostRepository implements RepositoryInterface
 
     public function getAll()
     {
-        $query = $this->connection->query('SELECT * FROM post LIMIT 100000');
+        $query = $this->connection->query('SELECT * FROM post LIMIT 100');
         $result = $query->fetchAll();
         return $result;
     }

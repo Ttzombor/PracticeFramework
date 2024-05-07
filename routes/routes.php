@@ -4,7 +4,7 @@ use App\Http\Router;
 
 Router::get('/', 'view');
 
-Router::get('/post', 'post', [\App\Controllers\PostController::class, 'get'], [\App\Http\Middleware\Auth::class]);
+Router::get('/post', 'post/post', [\App\Controllers\PostController::class, 'get'], [\App\Http\Middleware\Auth::class]);
 Router::get('/posts', 'post/all_posts', [\App\Controllers\PostController::class, 'getAll'], [\App\Http\Middleware\Auth::class]);
 
 Router::get('/user', 'user', [\App\Controllers\DashboardController::class, 'get'], [\App\Http\Middleware\Auth::class]);

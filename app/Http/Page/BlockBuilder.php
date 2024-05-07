@@ -5,14 +5,16 @@ namespace App\Http\Page;
 class BlockBuilder implements \App\Http\Page\Interface\BlockBuilderInterface
 {
     private Block $block;
-    public function __construct()
-    {
+
+    public function __construct(
+        public $params = null
+    ) {
         $this->reset();
     }
 
     private function reset()
     {
-        $this->block = new Block();
+        $this->block = new Block($this->params);
     }
 
     public function getBlock(): Block

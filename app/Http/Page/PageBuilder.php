@@ -23,14 +23,16 @@ class PageBuilder
         $this->blockBuilder->getBlock()->renderElements();
     }
 
-    public function __invoke($page)
+    public function __invoke($page, $params = null)
     {
-        $builder = new BlockBuilder();
+        $builder = new BlockBuilder($params);
         $this->setBuilder($builder);
-        if (str_contains($page, 'user')) {
+        if ($page && str_contains($page, 'user')) {
             $this->buildAdminPage($page);
         } else {
             $this->buildPage($page);
         }
+
     }
+
 }

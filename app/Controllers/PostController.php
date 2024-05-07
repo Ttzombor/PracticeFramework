@@ -16,14 +16,14 @@ class PostController extends \App\Http\AbstractController
     public function get()
     {
         $_SESSION['post'] = '123';
-        return 'post';
+        return $this->pageName;
     }
 
     public function getAll()
     {
         $posts = $this->repository->getAll();
-        $_SESSION['posts'] = $posts;
-        return $this->pageName;
+        //$_SESSION['posts'] = $posts;
+        return [$this->pageName, ['posts' => $posts]];
     }
     public function post()
     {

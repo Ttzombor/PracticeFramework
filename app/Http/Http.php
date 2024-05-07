@@ -11,10 +11,10 @@ class Http implements HttpInterface
     {
         $route = Router::matchRoute(Request::getUri());
 
-        $page = $this->dispatch($route);
+        list($page, $params) = $this->dispatch($route);
 
         try {
-            Page::getPage($page);
+            Page::getPage($page, $params);
         } catch (\Exception $exception) {
             return Page::get404Page();
         }
@@ -45,10 +45,12 @@ class Http implements HttpInterface
                     $controller = new $controllerClass($route->pageName);
                 }
                 $method = $route->type[1];
-                return $controller->$method();
-            } else {
-                return $route->pageName;
+                $result = $controller->$method();
+                if (is_array($result) && isset($result[1])) {
+                    return $result;
+                }
             }
+            return [$route->pageName, null];
         }
         return '404';
     }

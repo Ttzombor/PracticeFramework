@@ -6,10 +6,15 @@ class Block
 {
     public array $elements = [];
 
+    public function __construct(
+        public $params = null
+    ) {
+    }
+
     public function renderElements()
     {
         foreach ($this->elements as $element) {
-            require_once  $element;
+            include $element;
         }
     }
 }
