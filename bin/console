@@ -1,0 +1,18 @@
+#!/usr/bin/env php
+<?php
+
+require_once __DIR__. '/../vendor/autoload.php';
+
+use Symfony\Component\Console\Application;
+
+$application = new Application();
+
+$directory = scandir(__DIR__ . '/../app/Console');
+$files = array_diff($directory, array('.', '..'));
+foreach ($files as $class) {
+    $class = str_replace('.php', '', $class);
+    $class = 'App\Console\\' . $class;
+    $application->add(new $class);
+}
+
+$application->run();
