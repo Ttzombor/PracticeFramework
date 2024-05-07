@@ -18,4 +18,5 @@ Router::get('/user/login', 'user', [\App\Controllers\AuthController::class, 'log
 
 Router::get('/register', 'registration');
 Router::get('/login', 'login');
+Router::post('/login', 'login', [\App\Controllers\AuthController::class, 'login']);
 Router::get('/logout', '', [\App\Controllers\AuthController::class, 'logout']);
