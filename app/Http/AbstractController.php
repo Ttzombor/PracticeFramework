@@ -14,6 +14,7 @@ class AbstractController
     public static function redirect($route)
     {
         header("Location: {$route}", true, 303);
+        exit();
     }
 
     public function getParam($param)
