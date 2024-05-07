@@ -2,6 +2,7 @@
 
 namespace App\Http;
 
+use App\Container\Container;
 use App\Http\Interface\HttpInterface;
 
 class Http implements HttpInterface
@@ -34,7 +35,15 @@ class Http implements HttpInterface
             }
 
             if ($route->type !== null) {
-                $controller = new $route->type[0]($route->pageName);
+                if (isset($route->type[0]) && class_exists($route->type[0])) {
+                    $controllerClass = $route->type[0];
+                }
+                $container = new Container();
+                if ($container->has($controllerClass)) {
+                    $controller = $container->get($controllerClass);
+                } else {
+                    $controller = new $controllerClass($route->pageName);
+                }
                 $method = $route->type[1];
                 return $controller->$method();
             } else {
