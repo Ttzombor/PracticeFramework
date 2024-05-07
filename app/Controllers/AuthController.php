@@ -25,12 +25,9 @@ class AuthController extends \App\Http\AbstractController
             $user = $user[0];
         } else {
             NotificationCollector::setNotification('Please enter a valid username and password.', 'danger') ;
-            return 'login';
+            return $this->redirect(Request::getUri());
         }
 
-        if (!$user) {
-            return 'user not found';
-        }
         if (password_verify($password, $user['password'])) {
             $_SESSION['user'] = $user['id'];
             NotificationCollector::setNotification('Well done!', 'success') ;
