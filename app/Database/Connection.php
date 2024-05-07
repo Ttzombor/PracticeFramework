@@ -4,7 +4,7 @@ namespace App\Database;
 
 class Connection
 {
-    public static function setup()
+    public function setup()
     {
         $databaseConfigs = self::getConfigs();
         $connection = new \PDO(

@@ -14,12 +14,6 @@ class Bootstrap
 
     public function start()
     {
-        $this->setupDatabase();
         return new Http();
-    }
-
-    public function setupDatabase()
-    {
-        Connection::setup();
     }
 }
