@@ -3,17 +3,24 @@
 namespace App\Controllers;
 
 use App\Http\Request;
-use App\Model\User;
 use App\Notification\NotificationCollector;
+use App\Repository\Interface\RepositoryInterface;
 
 class AuthController extends \App\Http\AbstractController
 {
+    public function __construct(
+        string $pageName,
+        private RepositoryInterface $repository
+    ) {
+        parent::__construct($pageName);
+    }
+
     public function login()
     {
         $name = $this->getParam('name');
         $password = $this->getParam('password');
 
-        $user = User::getByName($name);
+        $user = $this->repository->getByField('name', $name);
         if ($user) {
             $user = $user[0];
         } else {
@@ -27,7 +34,7 @@ class AuthController extends \App\Http\AbstractController
         if (password_verify($password, $user['password'])) {
             $_SESSION['user'] = $user['id'];
             NotificationCollector::setNotification('Well done!', 'success') ;
-            if (Request::getUri() == '/user/login') {
+            if (Request::getUri() == '/login') {
                 return $this->redirect('/post');
             }
             return $this->redirect(Request::getUri());

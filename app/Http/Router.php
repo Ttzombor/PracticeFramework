@@ -11,7 +11,8 @@ class Router
         public $uri,
         public $pageName,
         public $type,
-        public $middleware
+        public $middleware,
+        public $request
     ) {
     }
 
@@ -23,7 +24,8 @@ class Router
             'uri' => $uri,
             'page' => $pageName,
             'type' => $type,
-            'middleware' => $middleware
+            'middleware' => $middleware,
+            'request' => 'GET'
         ];
     }
 
@@ -33,13 +35,14 @@ class Router
             'uri' => $uri,
             'page' => $pageName,
             'type' => $type,
-            'middleware' => $middleware
+            'middleware' => $middleware,
+            'request' => 'POST'
         ];
     }
     public static function matchRoute($uri)
     {
         foreach (self::$list as $route) {
-            if ($route['uri'] === $uri) {
+            if ($route['uri'] === $uri && $route['request'] === $_SERVER['REQUEST_METHOD']) {
                 if ($route['middleware']) {
                     $middleware = new BaseMiddleware();
                     $middlewareClass = null;
@@ -64,9 +67,9 @@ class Router
                     }
                     $route['middleware'] = $middleware;
                 }
-                return new self($uri, $route['page'], $route['type'], $route['middleware']);
+                return new self($uri, $route['page'], $route['type'], $route['middleware'], $route['request']);
             }
         }
-         return new self($uri, '404', null, null);
+         return new self($uri, '404', null, null, 'GET');
     }
 }
