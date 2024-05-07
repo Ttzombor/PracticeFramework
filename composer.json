@@ -1,7 +1,8 @@
 {
     "name": "root/practice.loc",
     "require": {
-        "twbs/bootstrap": "5.3.3"
+        "twbs/bootstrap": "5.3.3",
+        "fakerphp/faker": "^1.23"
     },
     "autoload": {
         "psr-4": {

@@ -2,6 +2,7 @@
 
 namespace App\Console;
 
+use App\Feed\PostFeed;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -22,6 +23,10 @@ class RunPostFeed extends Command
             '============',
             '',
         ]);
+
+        $postFeed = new PostFeed();
+
+        $postFeed->run();
 
         $output->write('Posts has been created.');
 
