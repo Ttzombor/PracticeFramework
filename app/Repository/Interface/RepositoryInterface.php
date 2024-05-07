@@ -6,7 +6,7 @@ use App\Model\AbstractModel;
 
 interface RepositoryInterface {
 
-    public function create(array $params): AbstractModel;
+    public function create(array $params);
     public function getByField(string $field, $value);
 
     public function getAll();

@@ -6,7 +6,7 @@ use App\Database\Connection;
 use App\Model\AbstractModel;
 use App\Repository\Interface\RepositoryInterface;
 
-class UserRepository implements RepositoryInterface
+class PostRepository implements RepositoryInterface
 {
     private $connection;
 
@@ -18,27 +18,24 @@ class UserRepository implements RepositoryInterface
 
     public function create(array $params)
     {
-        $date = date('Y-m-d H:i:s');
-        $params['password'] = password_hash($params['password'], PASSWORD_DEFAULT);
-        $query = $this->connection->prepare("INSERT INTO user (name, password, updated_at, created_ay) VALUES (:name, :password, :updated_at, :created_at)");
-        $query->execute([
-            'name' => $params['name'],
-            'password' => $params['password'],
-            'updated_at' => $date,
-            'created_at' => $date
-        ]);
+        list($title, $content, $user_id) = $params;
+        $sth = $this->connection->prepare("INSERT INTO post (title, content, user_id) VALUES (?, ?, ?)");
+        $sth->bindParam(1,$title);
+        $sth->bindParam(2, $content);
+        $sth->bindParam(3, $user_id);
+        $sth->execute();
     }
 
     public function getByField(string $field, $value)
     {
-        $query = $this->connection->query("SELECT * FROM user WHERE $field = '$value'");
+        $query = $this->connection->query("SELECT * FROM post WHERE $field = '$value'");
         $result = $query->fetchAll();
         return $result;
     }
 
     public function getAll()
     {
-        $query = $this->connection->query('SELECT * FROM user');
+        $query = $this->connection->query('SELECT * FROM post LIMIT 100000');
         $result = $query->fetchAll();
         return $result;
     }

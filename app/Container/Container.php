@@ -3,20 +3,25 @@
 namespace App\Container;
 
 use App\Controllers\AuthController;
+use App\Controllers\PostController;
 use App\Controllers\UserController;
 use App\Database\Connection;
+use App\Repository\PostRepository;
 use App\Repository\UserRepository;
 
-class Container {
+class Container
+{
     private array $instances;
 
     public function __construct()
     {
         $this->instances = [
-            Connection::class => fn() => new Connection(),
-            UserRepository::class => fn() => new UserRepository($this->get(Connection::class)),
-            UserController::class => fn() => new UserController('user', $this->get(UserRepository::class)),
-            AuthController::class => fn() => new AuthController('login', $this->get(UserRepository::class))
+            Connection::class => fn () => new Connection(),
+            UserRepository::class => fn () => new UserRepository($this->get(Connection::class)),
+            PostRepository::class => fn () => new PostRepository($this->get(Connection::class)),
+            UserController::class => fn () => new UserController('user', $this->get(UserRepository::class)),
+            AuthController::class => fn () => new AuthController('login', $this->get(UserRepository::class)),
+            PostController::class => fn () => new PostController('post/all_posts', $this->get(PostRepository::class))
         ];
     }
 
