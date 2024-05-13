@@ -14,6 +14,7 @@ class Connection
         );
         return $connection;
     }
+
     public static function getConfigs()
     {
         $configs = require 'config/app.php';
