@@ -9,5 +9,5 @@ return [
         'password' => 'qwerty123',
         'dbname' => 'practice'
     ],
-    'mode' => 'production'
+    'mode' => 'development'
 ];
