@@ -8,5 +8,6 @@ return [
         'username' => 'root',
         'password' => 'qwerty123',
         'dbname' => 'practice'
-    ]
+    ],
+    'mode' => 'production'
 ];
