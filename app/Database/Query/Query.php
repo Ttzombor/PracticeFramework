@@ -20,19 +20,18 @@ class Query
     private function query(string $query)
     {
         try {
-
-        } catch (\Exception $e) {
-            echo $e->getMessage();
+            $redis = new Redis();
+            $redis->connect('127.0.0.1', 6379);
+            $cacheKey = md5($query);
+            $cacheTTL = 3600;
+        } catch (\RedisException $e) {
+            $redis = null;
         }
-        $redis = new Redis();
-        $redis->connect('127.0.0.1', 6379);
-        $cacheKey = md5($query);
-        $cacheTTL = 3600;
         if ($redis && $redis->exists($cacheKey)) {
             $result = json_decode($redis->get($cacheKey), true);
         } else {
             $result = $this->connection->query($query)->fetchAll();
-            $redis->setex($cacheKey, $cacheTTL, json_encode($result));
+            $redis ? $redis->setex($cacheKey, $cacheTTL, json_encode($result)) : null;
         }
         return $result;
     }
