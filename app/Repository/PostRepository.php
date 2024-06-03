@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Database\Connection;
 use App\Model\AbstractModel;
 use App\Repository\Interface\RepositoryInterface;
+use Redis;
 
 class PostRepository implements RepositoryInterface
 {
@@ -35,15 +36,30 @@ class PostRepository implements RepositoryInterface
 
     public function getAll($page = 1)
     {
-        $batchSize = 100;
-        if ($page > 1) {
-            $currentBatch = $batchSize * $page;
-            $query = $this->connection->query(sprintf("SELECT *, (COUNT(*) OVER() / $batchSize) AS total_rows FROM post LIMIT %s OFFSET %d", $batchSize, $currentBatch));
+        $redis = new Redis();
+        $redis->connect('127.0.0.1', 6379);
+
+        $cacheKey = "post_list_$page";
+        $cacheTTL = 3600;
+        if ($redis->exists($cacheKey)) {
+            // Fetch data from Redis
+            $result = json_decode($redis->get($cacheKey), true);
+            echo "Data from Redis cache";
         } else {
-            $query = $this->connection->query(sprintf("SELECT *, (COUNT(*) OVER() / $batchSize) AS total_rows FROM post LIMIT %s", $batchSize));
+            $batchSize = 100;
+            if ($page > 1) {
+                $currentBatch = $batchSize * $page;
+                $query = $this->connection->query(sprintf("SELECT *, (COUNT(*) OVER() / $batchSize) AS total_rows FROM post LIMIT %s OFFSET %d", $batchSize, $currentBatch));
+            } else {
+                $query = $this->connection->query(sprintf("SELECT *, (COUNT(*) OVER() / $batchSize) AS total_rows FROM post LIMIT %s", $batchSize));
+            }
+
+            $result = $query->fetchAll();
+
+            $redis->setex($cacheKey, $cacheTTL, json_encode($result));
+
         }
 
-        $result = $query->fetchAll();
         return $result;
     }
 
