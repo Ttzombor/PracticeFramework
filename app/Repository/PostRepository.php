@@ -35,10 +35,10 @@ class PostRepository implements RepositoryInterface
 
     public function getAll($page = 1)
     {
-        $batchSize = 10;
+        $batchSize = 100;
         if ($page > 1) {
             $currentBatch = $batchSize * $page;
-            $query = $this->connection->query(sprintf("SELECT * FROM post LIMIT %s OFFSET %d", $batchSize, $currentBatch));
+            $query = $this->connection->query(sprintf("SELECT *, (COUNT(*) OVER() / $batchSize) AS total_rows FROM post LIMIT %s OFFSET %d", $batchSize, $currentBatch));
         } else {
             $query = $this->connection->query(sprintf('SELECT * FROM post LIMIT %s', $batchSize));
         }
