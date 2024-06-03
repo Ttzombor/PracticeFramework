@@ -33,9 +33,16 @@ class PostRepository implements RepositoryInterface
         return $result;
     }
 
-    public function getAll()
+    public function getAll($page = 1)
     {
-        $query = $this->connection->query('SELECT * FROM post LIMIT 100');
+        $batchSize = 10;
+        if ($page > 1) {
+            $currentBatch = $batchSize * $page;
+            $query = $this->connection->query(sprintf("SELECT * FROM post LIMIT %s OFFSET %d", $batchSize, $currentBatch));
+        } else {
+            $query = $this->connection->query(sprintf('SELECT * FROM post LIMIT %s', $batchSize));
+        }
+
         $result = $query->fetchAll();
         return $result;
     }

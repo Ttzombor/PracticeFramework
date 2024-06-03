@@ -19,4 +19,6 @@ require 'routes/routes.php';
 
 $bootstrap = Bootstrap::create();
 
-$bootstrap->start()->send();
+$response = $bootstrap->start();
+
+return $response->send();

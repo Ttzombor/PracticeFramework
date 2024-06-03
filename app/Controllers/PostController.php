@@ -21,8 +21,8 @@ class PostController extends \App\Http\AbstractController
 
     public function getAll()
     {
-        $posts = $this->repository->getAll();
-        //$_SESSION['posts'] = $posts;
+        $currentPage = (int)$this->getParam('p') ?? 1;
+        $posts = $this->repository->getAll($currentPage);
         return [$this->pageName, ['posts' => $posts]];
     }
     public function post()
