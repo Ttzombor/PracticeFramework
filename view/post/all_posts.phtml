@@ -5,11 +5,18 @@ $totalPages = $this->params['totalPages'];
 
 $previous = $currentPage - 1;
 $next = $currentPage + 1;
-$index = 0;
+$startPagination = $currentPage - 4;
+$endPagination = $currentPage + 5;
 ?>
-<nav aria-label="Page navigation example">
-    <ul class="pagination">
+<nav aria-label="Page navigation example" >
+    <ul class="pagination fixed-bottom" style="justify-content: center;">
         <?php if ($previous): ?>
+            <li class="page-item">
+                <a class="page-link" href="<?= "?p=1" ?>" aria-label="To beginning">
+                    <span aria-hidden="true">&laquo;</span>
+                    <span class="sr-only">To beginning</span>
+                </a>
+            </li>
             <li class="page-item">
                 <a class="page-link" href="<?= "?p=$previous" ?>" aria-label="Previous">
                     <span aria-hidden="true">&laquo;</span>
@@ -17,15 +24,29 @@ $index = 0;
                 </a>
             </li>
         <?php endif; ?>
-        <?php while ($index != $totalPages) : ?>
-            <?php $index++; ?>
-            <li class="page-item <?= $currentPage == $index ? "active" : "" ?>"><a class="page-link" href="<?= "?p=$index" ?>"><?= $index ?></a></li>
+        <?php while ($startPagination != $endPagination) : ?>
+            <?php if ($startPagination <= 0) {
+                $startPagination++;
+                continue;
+            } ?>
+            <?php if ($startPagination > $totalPages) {
+                break;
+            } ?>
+            <li class="page-item <?= $currentPage == $startPagination ? "active" : "" ?>"><a class="page-link" href="<?= "?p=$startPagination" ?>"><?= $startPagination ?></a></li>
+            <?php $startPagination++; ?>
+
         <?php endwhile; ?>
         <?php if ($next <= $totalPages) : ?>
             <li class="page-item">
                 <a class="page-link" href="<?= "?p=$next" ?>" aria-label="Next">
                     <span aria-hidden="true">&raquo;</span>
                     <span class="sr-only">Next</span>
+                </a>
+            </li>
+            <li class="page-item">
+                <a class="page-link" href="<?= "?p=$totalPages" ?>" aria-label="To end">
+                    <span aria-hidden="true">&raquo;</span>
+                    <span class="sr-only">To end</span>
                 </a>
             </li>
         <?php endif; ?>
