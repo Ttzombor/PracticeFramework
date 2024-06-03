@@ -2,6 +2,8 @@
 
 namespace App\Database;
 
+use App\Database\Query\Query;
+
 class Connection
 {
     public function setup()
@@ -14,6 +16,11 @@ class Connection
         );
         return $connection;
     }
+
+//    public function query(string $query)
+//    {
+//        Query::query($query);
+//    }
 
     public static function getConfigs()
     {

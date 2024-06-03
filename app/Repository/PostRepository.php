@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Database\Connection;
+use App\Database\Query\Query;
 use App\Model\AbstractModel;
 use App\Repository\Interface\RepositoryInterface;
 use Redis;
@@ -12,9 +13,8 @@ class PostRepository implements RepositoryInterface
     private $connection;
 
     public function __construct(
-        private Connection $databaseConnection
+        private Query $query
     ) {
-        $this->connection = $databaseConnection->setup();
     }
 
     public function create(array $params)
@@ -36,28 +36,19 @@ class PostRepository implements RepositoryInterface
 
     public function getAll($page = 1)
     {
-        $redis = new Redis();
-        $redis->connect('127.0.0.1', 6379);
-
-        $cacheKey = "post_list_$page";
-        $cacheTTL = 3600;
-        if ($redis->exists($cacheKey)) {
-            // Fetch data from Redis
-            $result = json_decode($redis->get($cacheKey), true);
-            echo "Data from Redis cache";
+        $batchSize = 100;
+        if ($page > 1) {
+            $currentBatch = $batchSize * $page;
+            $result = $this->query->customSelect(
+                sprintf("SELECT *, (COUNT(*) OVER() / $batchSize) AS total_rows FROM post LIMIT %s OFFSET %d",
+                    $batchSize,
+                    $currentBatch)
+            );
         } else {
-            $batchSize = 100;
-            if ($page > 1) {
-                $currentBatch = $batchSize * $page;
-                $query = $this->connection->query(sprintf("SELECT *, (COUNT(*) OVER() / $batchSize) AS total_rows FROM post LIMIT %s OFFSET %d", $batchSize, $currentBatch));
-            } else {
-                $query = $this->connection->query(sprintf("SELECT *, (COUNT(*) OVER() / $batchSize) AS total_rows FROM post LIMIT %s", $batchSize));
-            }
-
-            $result = $query->fetchAll();
-
-            $redis->setex($cacheKey, $cacheTTL, json_encode($result));
-
+            $result = $this->query->customSelect(
+                sprintf("SELECT *, (COUNT(*) OVER() / $batchSize) AS total_rows FROM post LIMIT %s",
+                    $batchSize)
+            );
         }
 
         return $result;
