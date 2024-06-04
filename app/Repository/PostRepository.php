@@ -39,19 +39,18 @@ class PostRepository implements RepositoryInterface
         $batchSize = 100;
         if ($page > 1) {
             $currentBatch = $batchSize * $page;
-            $result = $this->query->customSelect(
+            $this->query->setQuery(
                 sprintf("SELECT *, (COUNT(*) OVER() / $batchSize) AS total_rows FROM post LIMIT %s OFFSET %d",
                     $batchSize,
                     $currentBatch)
             );
         } else {
-            $result = $this->query->customSelect(
+            $this->query->setQuery(
                 sprintf("SELECT *, (COUNT(*) OVER() / $batchSize) AS total_rows FROM post LIMIT %s",
                     $batchSize)
             );
         }
-
-        return $result;
+        return $this->query->execute();
     }
 
     public function update(): AbstractModel
