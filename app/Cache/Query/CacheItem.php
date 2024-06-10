@@ -34,7 +34,7 @@ class CacheItem implements CacheItemInterface
 
     public function set($value)
     {
-        $this->cacheDriver->setex($this->getKey(), $this->expiresAfter(), json_encode($value));
+        $this->cacheDriver->set($this->getKey(),  json_encode($value), $this->expiresAfter());
     }
 
     public function expiresAt($expiration = null)

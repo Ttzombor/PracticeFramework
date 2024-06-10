@@ -2,6 +2,7 @@
 
 namespace App\Cache\System\Query;
 
+use App\Cache\System\Memcached;
 use App\Cache\System\Redis;
 
 class CacheDriver implements \App\Cache\System\CacheDriver
@@ -14,7 +15,12 @@ class CacheDriver implements \App\Cache\System\CacheDriver
                 unset($configs['cache']['sql']['driver']);
                 return new Redis($configs['cache']['sql']);
             }
-
+            if ($configs['cache']['sql']['driver'] == 'memcached') {
+                unset($configs['cache']['sql']['driver']);
+                $memcached = new Memcached();
+                $memcached->addServers([[$configs['cache']['sql']['host'], $configs['cache']['sql']['port']]]);
+                return $memcached;
+            }
         }
         return false;
     }
