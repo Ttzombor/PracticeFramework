@@ -3,16 +3,19 @@
 namespace App\Cache\Query;
 
 use App\Cache\CacheItemInterface;
+use App\Cache\System\Query\CacheDriver;
 use App\Cache\System\Redis;
 use App\Database\Query\Query;
 
 class CacheItem implements CacheItemInterface
 {
+    public $cacheDriver;
     public function __construct(
-        private Query $query,
-        private Redis $redis
+        private Query $query
     ) {
+        $this->cacheDriver = CacheDriver::load();
     }
+
 
     public function getKey()
     {
@@ -21,26 +24,26 @@ class CacheItem implements CacheItemInterface
 
     public function get()
     {
-        return json_decode($this->redis->get($this->getKey()), true);
+        return json_decode($this->cacheDriver->get($this->getKey()), true);
     }
 
     public function isHit()
     {
-        return $this->redis->exists($this->getKey());
+        return $this->cacheDriver->exists($this->getKey());
     }
 
     public function set($value)
     {
-        $this->redis->setex($this->getKey(), $this->expiresAfter(), json_encode($value));
+        $this->cacheDriver->setex($this->getKey(), $this->expiresAfter(), json_encode($value));
     }
 
     public function expiresAt($expiration = null)
     {
-        return $this->redis->ttl;
+        return $this->cacheDriver->ttl;
     }
 
     public function expiresAfter($time = null)
     {
-        return $this->redis->ttl;
+        return $this->cacheDriver->ttl;
     }
 }

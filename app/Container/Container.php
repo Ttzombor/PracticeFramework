@@ -3,6 +3,7 @@
 namespace App\Container;
 
 use App\Cache\Query\CacheItem;
+use App\Cache\System\Query\CacheDriver;
 use App\Controllers\AuthController;
 use App\Controllers\PostController;
 use App\Controllers\UserController;
@@ -20,7 +21,7 @@ class Container
         $this->instances = [
             Connection::class => fn () => new Connection(),
             Query::class => fn () => new Query($this->get(Connection::class)),
-            CacheItem::class => fn () => new CacheItem($this->get(Query::class), new \App\Cache\System\Redis()),
+            CacheItem::class => fn () => new CacheItem($this->get(Query::class)),
             UserRepository::class => fn () => new UserRepository($this->get(Connection::class)),
             PostRepository::class => fn () => new PostRepository($this->get(Query::class)),
             UserController::class => fn () => new UserController('user', $this->get(UserRepository::class)),

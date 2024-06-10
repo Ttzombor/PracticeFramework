@@ -33,7 +33,7 @@ class Query
                 } else {
                     $result = $this->connection->exec($this->query);
                 }
-                if ($this->cachedItem) {
+                if ($this->cachedItem->cacheDriver) {
                     $this->cachedItem->set($result);
                 }
             }
@@ -47,10 +47,12 @@ class Query
         $container = new Container();
         if ($container->has(CacheItem::class)) {
             $this->cachedItem = $container->get(CacheItem::class);
-            $this->cachedItem = new CacheItem($this, new \App\Cache\System\Redis());
-            $this->cachedItem->getKey();
-            if ($this->cachedItem->isHit()) {
-                return $this->cachedItem->get();
+            $this->cachedItem = new CacheItem($this);
+            if ($this->cachedItem->cacheDriver) {
+                $this->cachedItem->getKey();
+                if ($this->cachedItem->isHit()) {
+                    return $this->cachedItem->get();
+                }
             }
         }
         return null;
